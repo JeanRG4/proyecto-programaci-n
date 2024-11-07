@@ -824,6 +824,11 @@ int main() {
                             <h1>Métodos de Ordenamiento</h1>
                             <p>Métodos de Ordenamiento</p>
 <p> Los métodos de ordenamiento son algoritmos utilizados para organizar elementos de una lista o arreglo en un orden específico, como ascendente o descendente, mejorando la eficiencia de la búsqueda y manipulación de datos. </p>
+
+<div class="video-container">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ArHNbVPswFo?start=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="margin:20px 0;"></iframe>
+</div>
+
 <!-- Ordenamiento Burbuja -->
 <div class="metodo">
   <h3>Ordenamiento Burbuja (Bubble Sort)</h3>
@@ -869,7 +874,7 @@ int main() {
 }
     </code></pre>
   </div>
-  <button class="copiar-btn" onclick="copyToClipboard('#codigo1')">Copiar código</button>
+  <button class="copiar-btn" onclick="copiarCodigo('codigo1')">Copiar código</button>
 </div>
 
 <!-- Ordenamiento por Inserción -->
@@ -918,7 +923,7 @@ int main() {
 }
     </code></pre>
   </div>
-  <button class="copiar-btn" onclick="copyToClipboard('#codigo2')">Copiar código</button>
+  <button class="copiar-btn" onclick="copiarCodigo('codigo2')">Copiar código</button>
 </div>
 
 <!-- Ordenamiento por Selección -->
@@ -968,8 +973,8 @@ int main() {
 }
     </code></pre>
   </div>
+  <button class="copiar-btn" onclick="copiarCodigo('codigo3')">Copiar código</button>
 </div>
-<button class="copiar-btn" onclick="copyToClipboard('#codigo3')">Copiar código</button>
 
 <!-- Ordenamiento Shell -->
 <div class="metodo">
@@ -1017,8 +1022,10 @@ int main() {
 }
     </code></pre>
   </div>
+  <button class="copiar-btn" onclick="copiarCodigo('codigo4')">Copiar código</button>
 </div>
-<button class="copiar-btn" onclick="copyToClipboard('#codigo4')">Copiar código</button>
+
+
 
                         `;
                         break;
@@ -1029,46 +1036,65 @@ int main() {
             }, 500);
         }
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar.style.left === '0px') {
-                sidebar.style.left = '-250px';
-            } else {
-                sidebar.style.left = '0px';
-            }
-        }
-
-        function closeSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.style.left = '-250px';
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-  var lazyVideos = document.querySelectorAll(".lazy-video");
-
-  function loadVideo() {
-    lazyVideos.forEach(function(video) {
-      if (video.getBoundingClientRect().top < window.innerHeight && !video.src) {
-        video.src = video.getAttribute('data-src'); // Carga el vídeo
-        video.classList.remove('lazy-video'); // Elimina la clase para evitar cargarlo de nuevo
-      }
-    });
-  }
-
-  loadVideo(); // Verifica si el vídeo está en la vista al cargar la página.
-  window.addEventListener("scroll", loadVideo); // Carga el vídeo cuando el usuario hace scroll.
-});
-
-function copiarCodigo(id) {
-    var codigo = document.getElementById(id);
-    var rango = document.createRange();
-    rango.selectNode(codigo);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(rango);
-    document.execCommand('copy');
-    alert("Código copiado al portapapeles");
+        // Toggle Sidebar
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const currentLeft = getComputedStyle(sidebar).left;
+    if (currentLeft === '0px') {
+        sidebar.style.left = '-250px';  // Ocultar la barra lateral
+    } else {
+        sidebar.style.left = '0px';    // Mostrar la barra lateral
+    }
 }
 
+// Close Sidebar
+function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.style.left = '-250px';  // Ocultar la barra lateral
+}
+
+// Lazy load de videos
+document.addEventListener("DOMContentLoaded", function() {
+    var lazyVideos = document.querySelectorAll(".lazy-video");
+
+    function loadVideo() {
+        lazyVideos.forEach(function(video) {
+            if (video.getBoundingClientRect().top < window.innerHeight && !video.src) {
+                video.src = video.getAttribute('data-src'); // Carga el vídeo
+                video.classList.remove('lazy-video'); // Elimina la clase para evitar cargarlo de nuevo
+            }
+        });
+    }
+
+    loadVideo(); // Verifica si el vídeo está en la vista al cargar la página.
+    window.addEventListener("scroll", loadVideo); // Carga el vídeo cuando el usuario hace scroll.
+});
+
+// Copiar código al portapapeles
+function copiarCodigo(id) {
+    var codigo = document.getElementById(id);
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(codigo.innerText || codigo.textContent)
+            .then(function() {
+                alert("Código copiado al portapapeles");
+            })
+            .catch(function(err) {
+                alert("Error al copiar el código: " + err);
+            });
+    } else {
+        // Método alternativo en caso de que Clipboard API no esté disponible
+        var rango = document.createRange();
+        rango.selectNode(codigo);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(rango);
+        try {
+            document.execCommand('copy');
+            alert("Código copiado al portapapeles");
+        } catch (err) {
+            alert("No se pudo copiar el código");
+        }
+    }
+}
     </script>
 </body>
 </html>
