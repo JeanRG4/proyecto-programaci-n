@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página con Fondo y Barra Lateral</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+/* Imagen de fondo */
+.background-image {
+    position: fixed; /* Fija la imagen en la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ocupa todo el ancho de la pantalla */
+    height: 100%; /* Ocupa toda la altura de la pantalla */
+    background-image: url('https://img.freepik.com/fotos-premium/ilustracion-vectorial-codigo-binario-fondo-oscuro-concepto-programacion-software_1197797-212959.jpg');
+    background-size: cover; /* Asegura que la imagen cubra toda la pantalla sin deformarse */
+    background-position: center; /* Centra la imagen de fondo */
+    background-attachment: fixed; /* Hace que el fondo permanezca fijo mientras se desplaza el contenido */
+    z-index: -1; /* Asegura que el fondo esté detrás del contenido */
+}
+
+/* Medios para pantallas más pequeñas (móviles) */
+@media (max-width: 768px) {
+    .background-image {
+        background-attachment: scroll; /* Hace que el fondo se desplace con el contenido en pantallas móviles */
+    }
+}
+
+/* Barra lateral */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Inicialmente oculta */
+    width: 250px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow-x: hidden;
+    transition: left 0.3s ease;
+    z-index: 100;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+}
+
+.sidebar li {
+    margin: 20px 0;
+}
+
+.sidebar li a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1); /* Efecto de agrandamiento al pasar */
+}
+
+.sidebar li a i {
+    margin-right: 10px; /* Separación entre el icono y el texto */
+}
+
+/* Botón para abrir la barra lateral */
+.open-sidebar-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    z-index: 101;
+    font-size: 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.open-sidebar-btn:hover {
+    background-color: #555;
+}
+
+/* Contenido */
+.content {
+    margin-top: 50px; /* Espacio para el menú */
+    padding: 20px;
+    color: white;
+    text-align: center;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.content h1 {
+    margin-bottom: 20px;
+}
+
+/* Fondo semi-transparente */
+.content, .index {
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 20px;
+}
+
+/* Estilo para el índice */
+.index a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 12px 15px;
+    margin: 10px 0; /* Añadir espacio entre los enlaces */
+    font-size: 18px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.index a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1); /* Efecto de agrandamiento al pasar */
+}
+
+/* Estilo para el ícono */
+.index a i {
+    margin-right: 12px; /* Separación entre el ícono y el texto */
+}
+
+img {
+    max-width: 100%; /* Asegura que la imagen no se salga del contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    display: block; /* Hace que la imagen sea un bloque, para poder centrarla */
+    margin: 20px auto; /* Centra la imagen horizontalmente y añade un margen */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil alrededor de la imagen */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave para efectos */
+}
+
+/* Efecto al pasar el mouse (hover) */
+img:hover {
+    transform: scale(1.05); /* Aumenta un poco el tamaño de la imagen */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra más intensa cuando se pasa el mouse */
+}
+
+iframe {
+    width: 100%;
+    height: auto;
+}
+
+.video-container {
+    position: relative;
+    width: 100%; /* Hace que el contenedor ocupe el 100% del ancho */
+    max-width: 800px; /* Establece un máximo para que no se estire demasiado en pantallas grandes */
+    margin: 20px auto; /* Centra el contenedor en la página */
+    padding-bottom: 56.25%; /* Relación de aspecto 16:9 (alto ancho) */
+    height: 0; /* Oculta el alto directo del contenedor */
+    overflow: hidden; /* Evita que cualquier cosa se desborde del contenedor */
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Hace que el iframe se ajuste al contenedor */
+    height: 100%; /* Hace que el iframe ocupe toda la altura del contenedor */
+    border: none; /* Elimina cualquier borde */
+}
+
+.lazy-video {
+    width: 100%;
+    height: 315px;
+}
+
+/* Estilo del recuadro alrededor del código */
+.codigo-recuadro {
+    background-color: #333; /* Fondo oscuro para mejor contraste */
+    border-left: 4px solid #4CAF50; /* Borde verde */
+    padding: 20px; /* Aumento del espaciado dentro del recuadro */
+    margin-bottom: 20px; /* Margen inferior */
+    font-family: "Courier New", Courier, monospace; /* Fuente monoespaciada */
+    color: #f4f4f4; /* Color de texto claro */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    white-space: pre-wrap; /* Mantener saltos de línea en el código */
+    word-wrap: break-word; /* Asegura que las palabras largas se rompan */
+    text-align: left; /* Alineación a la izquierda */
+    font-size: 1.25rem; /* Aumentar el tamaño del texto */
+    max-width: 100%; /* Asegura que no se salga del cuadro */
+    overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
+    word-break: break-all; /* Permite que las palabras largas se rompan para ajustarse */
+}
+
+/* Estilos del botón de copiar */
+.copiar-btn {
+    background-color: #4CAF50; /* Color de fondo verde */
+    color: white; /* Color del texto blanco */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Relleno */
+    text-align: center; /* Centrado del texto */
+    text-decoration: none; /* Sin subrayado */
+    display: inline-block; /* Se muestra en línea */
+    font-size: 16px; /* Tamaño de fuente */
+    cursor: pointer; /* Cambia el cursor a pointer */
+    border-radius: 5px; /* Bordes redondeados */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
+}
+
+/* Efecto cuando el cursor pasa sobre el botón */
+.copiar-btn:hover {
+    background-color: #45a049; /* Color de fondo más oscuro */
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3); /* Sombra más intensa */
+}
+
+
+/* Media query para ajustar tamaño en pantallas pequeñas (móviles) */
+@media screen and (max-width: 768px) {
+    .codigo-recuadro, .codigo-recuadro-claro {
+        font-size: 1.5rem; /* Aumentar aún más el tamaño del texto en móviles */
+        padding: 15px; /* Reducir un poco el espaciado en móviles */
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="background-image"></div>
+
+    <!-- Barra lateral -->
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a tabindex="1" onclick="showSection('inicio')"><i class="fas fa-home"></i>Inicio</a></li>
+            <li><a tabindex="2" onclick="showSection('lenguaje')"><i class="fas fa-book"></i>Lenguaje C</a></li>
+            <li><a tabindex="3" onclick="showSection('datos')"><i class="fas fa-desktop"></i>Datos: Tipos y Características</a></li>
+            <li><a tabindex="4" onclick="showSection('estructurasC')"><i class="fas fa-archive"></i>Estructuras de Control</a></li>
+            <li><a tabindex="5" onclick="showSection('estructurasR')"><i class="fas fa-th-large"></i>Estructuras Repetitivas</a></li>
+            <li><a tabindex="6" onclick="showSection('arreglos')"><i class="fas fa-plug"></i>Arreglos</a></li>
+            <li><a tabindex="7" onclick="showSection('metodos')"><i class="fas fa-hdd"></i>Métodos de Ordenamiento</a></li>
+        </ul>
+    </div>
+
+    <!-- Botón para abrir la barra lateral -->
+    <button class="open-sidebar-btn" onclick="toggleSidebar()">☰</button>
+
+    <!-- Contenido dinámico -->
+    <div class="content" id="content">
+        <h1>Inicio</h1>
+        <p>Bienvenido a nuestra página sobre programación y bases de datos. Aquí aprenderás conceptos esenciales de programación en C y cómo trabajar con bases de datos. Usa el menú lateral para navegar por las diferentes secciones.</p>
+        
+        <!-- Índice -->
+        <div class="index">
+            <a tabindex="1" onclick="showSection('inicio')"><i class="fas fa-home"></i>Inicio: Información general</a>
+            <a tabindex="2" onclick="showSection('lenguaje')"><i class="fas fa-book"></i>Lenguaje C: Fundamentos</a>
+            <a tabindex="3" onclick="showSection('datos')"><i class="fas fa-desktop"></i>Datos: Tipos y características</a>
+            <a tabindex="4" onclick="showSection('estructurasC')"><i class="fas fa-archive"></i>Estructuras de Control: Condicionales</a>
+            <a tabindex="5" onclick="showSection('estructurasR')"><i class="fas fa-th-large"></i>Estructuras Repetitivas: Bucles</a>
+            <a tabindex="6" onclick="showSection('arreglos')"><i class="fas fa-plug"></i>Arreglos: Colecciones de datos</a>
+            <a tabindex="7" onclick="showSection('metodos')"><i class="fas fa-hdd"></i>Métodos de Ordenamiento: Algoritmos</a>
+        </div>
+    </div>
+
+    <script>
+        function showSection(section) {
+            const content = document.getElementById('content');
+            closeSidebar();
+
+            content.style.opacity = 0;
+            setTimeout(() => {
+                switch (section) {
+                    case 'inicio':
+                        content.innerHTML = `
+                            <h1>Inicio</h1>
+                            <p>Bienvenido a nuestra página sobre programación y bases de datos. Aquí aprenderás conceptos esenciales de programación en C y cómo trabajar con bases de datos. Usa el menú lateral para navegar por las diferentes secciones.</p>
+                            <div class="index">
+                                <a tabindex="1" onclick="showSection('inicio')"><i class="fas fa-home"></i>Inicio: Información general</a>
+                                <a tabindex="2" onclick="showSection('lenguaje')"><i class="fas fa-book"></i>Lenguaje C: Fundamentos</a>
+                                <a tabindex="3" onclick="showSection('datos')"><i class="fas fa-desktop"></i>Datos: Tipos y características</a>
+                                <a tabindex="4" onclick="showSection('estructurasC')"><i class="fas fa-archive"></i>Estructuras de Control: Condicionales</a>
+                                <a tabindex="5" onclick="showSection('estructurasR')"><i class="fas fa-th-large"></i>Estructuras Repetitivas: Bucles</a>
+                                <a tabindex="6" onclick="showSection('arreglos')"><i class="fas fa-plug"></i>Arreglos: Colecciones de datos</a>
+                                <a tabindex="7" onclick="showSection('metodos')"><i class="fas fa-hdd"></i>Métodos de Ordenamiento: Algoritmos</a>
+                            </div>
+                        `;
+                        break;
+                    case 'lenguaje':
+                        content.innerHTML = `
+                            <h1>Lenguaje C</h1>
+                            <p><strong>1. Introducción a la Programación en Lenguaje C</strong></p>
+
+<p><strong>Historia y características del Lenguaje C</strong></p>
+<p>El lenguaje C fue desarrollado a principios de los años 70 por Dennis Ritchie en los Laboratorios Bell, inicialmente como una evolución del lenguaje B, con el objetivo de facilitar el desarrollo del sistema operativo UNIX. Desde su creación, C ha tenido un impacto profundo en la programación, convirtiéndose en uno de los lenguajes más influyentes y utilizados en el desarrollo de software. Su popularidad se debe a su eficiencia, portabilidad y a una estructura que permite escribir programas de alto rendimiento. Aunque ha sido superado en ciertos contextos por otros lenguajes de alto nivel, el lenguaje C sigue siendo fundamental en la creación de sistemas operativos y aplicaciones modernas.</p>
+
+<div class="video-container">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/MeD50u0IDGY?si=nVnCtVb8Vy8El_YD&start=14" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="margin:20px 0;"></iframe>
+</div>
+
+<p><strong>Las características clave del lenguaje C incluyen:</strong></p>
+<ul>
+    <li><strong>Eficiencia:</strong> Como un lenguaje de bajo nivel, C permite un control preciso sobre los recursos del hardware, lo que lo hace extremadamente rápido y adecuado para sistemas críticos.</li>
+    <li><strong>Portabilidad:</strong> Los programas escritos en C pueden ser compilados en diferentes plataformas con mínimos cambios en el código, facilitando su uso en diversas arquitecturas.</li>
+    <li><strong>Flexibilidad:</strong> El lenguaje permite la manipulación directa de la memoria y los registros del hardware, otorgando gran libertad al programador.</li>
+    <li><strong>Modularidad:</strong> Soporta el uso de funciones y bibliotecas, promoviendo la reutilización y el mantenimiento del código.</li>
+    <li><strong>Estándar ANSI:</strong> Existe un estándar internacional conocido como ANSI C, que asegura la consistencia y compatibilidad entre compiladores y plataformas.</li>
+</ul>
+
+<div class="video-container">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/K03ZBOE9TFQ?start=21" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="margin:20px 0;"></iframe>
+</div>
+
+<p><strong>Aplicaciones y ventajas del Lenguaje C</strong></p>
+<p>C es utilizado en una amplia gama de aplicaciones debido a su flexibilidad y eficiencia. Algunas de las aplicaciones más comunes incluyen:</p>
+<ul>
+    <li><strong>Desarrollo de sistemas operativos:</strong> C fue el lenguaje principal para la creación de UNIX y también es fundamental en sistemas operativos modernos como Linux y Windows.</li>
+    <li><strong>Programación de sistemas embebidos:</strong> Muchos dispositivos embebidos, como microcontroladores y dispositivos de Internet de las Cosas (IoT), utilizan C debido a su bajo nivel y eficiencia.</li>
+    <li><strong>Desarrollo de bases de datos:</strong> Motores de bases de datos, como MySQL, están escritos en C, beneficiándose de su rendimiento.</li>
+    <li><strong>Aplicaciones científicas y de ingeniería:</strong> El alto rendimiento de C lo convierte en la opción ideal para cálculos intensivos y procesamiento de datos.</li>
+    <li><strong>Compiladores y otros lenguajes:</strong> C ha influido en muchos lenguajes modernos y se utiliza comúnmente para escribir compiladores e intérpretes.</li>
+</ul>
+
+<img src="https://www.universidadviu.com/sites/universidadviu.com/files/images/lenguaje-de-programacion-c.jpg" loading="lazy" style="max-width:100%; height:auto; display:block; margin:20px 0;">
+
+<p><strong>Las ventajas del lenguaje C incluyen:</strong></p>
+<ul>
+    <li><strong>Rendimiento:</strong> Los programas en C pueden ejecutar operaciones complejas rápidamente, lo cual es fundamental en sistemas críticos.</li>
+    <li><strong>Control del hardware:</strong> Al permitir el acceso directo a la memoria y al hardware, es ideal para tareas que requieren control detallado, como la programación de controladores de dispositivos.</li>
+    <li><strong>Amplitud de bibliotecas:</strong> C cuenta con una vasta colección de bibliotecas estándar que facilitan el desarrollo de programas.</li>
+    <li><strong>Comunidad y soporte:</strong> Siendo uno de los lenguajes más antiguos y populares, C tiene una amplia comunidad y abundantes recursos de aprendizaje.</li>
+</ul>
+
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgSGtA8uvOUXexXWUa9Ecp7Vnean3zmL2pfTMqhpJTWatdtZ7oHH73N_VemyY30NrXvqL4lZVJ5BWrreYOhbQtISOFgnEcdxOw1FqsQ3Qat9FC-sbuszbquYVYBL054EGQiXxSwkMGQ2tc/s1600/elc11.jpg" loading="lazy" style="max-width:100%; height:auto; display:block; margin:20px 0;">
+
+
+
+                        `;
+                        break;
+                    case 'datos':
+                        content.innerHTML = `
+                            <h1>Datos: Tipos y Características</h1>
+                            <p>Contenido sobre tipos de datos y sus características.</p>
+                        `;
+                        break;
+                    case 'estructurasC':
+                        content.innerHTML = `
+                            <h1>Estructuras de Control</h1>
+                            <p>Estructuras de Control en C</p>
+<p>Las estructuras de control en C son fundamentales para definir el flujo de ejecución de un programa, permitiendo ejecutar distintos bloques de código en función de condiciones específicas. Estas incluyen las estructuras secuenciales y las selectivas, entre las cuales se encuentran las estructuras condicionales: if simple, if-else y una variante para múltiples casos utilizando switch-case.</p>
+
+<div class="video-container">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/8A5UUgyAmUs?start=0&si=uwoALhNc3o6rCnZq" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="margin:20px 0;"></iframe>
+</div>
+
+<p><strong>Estructuras Secuenciales</strong></p>
+
+<img src= "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEir6MqDdBrWAJlITMggwQcuz0-rf0gmRLG1jmQZsgLZaKEG7L_BYWBQ07ajlX59G-LhuNOv76jLemGl3uPRa0DaeBkeY_2tlU4KgN4C9j7TXru7rr6K0To_4BMot6uAV5LhDXduID05jn0/s1600/modelo+estructura+secuencial.jpg." loading="lazy" style="max-width:100%; height:auto; display:block; margin:20px 0;">
+
+<p>Las estructuras secuenciales son las más básicas en programación. En este tipo de estructura, las instrucciones se ejecutan en el orden en que se escriben, una tras otra, sin condiciones. Un ejemplo de estructura secuencial en C sería una serie de operaciones simples:</p>
+
+<div class="codigo-recuadro">
+  <pre><code id="codigo1" class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 5;
+    int b = 3;
+    int resultado = a + b;
+    printf("El resultado es: %d", resultado);
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo1')">Copiar código</button>
+
+<p><strong>Estructuras de Control Selectivas</strong></p>
+
+<img src= "https://fundacioncarlosslim.org/wp-content/uploads/2022/06/estructuras-selectivas-pseudocodigo-1.jpg" loading="lazy" style="max-width:100%; height:auto; display:block; margin:20px 0;">
+
+<p>Las estructuras de control selectivas permiten a los programas tomar decisiones según condiciones específicas. Las principales estructuras condicionales en C incluyen if simple, if-else y switch-case.</p>
+
+<p><strong>Condicionales Simples (if)</strong></p>
+
+<img src= "https://lh6.googleusercontent.com/proxy/3q5ekCS-eqWwEcedc_ysyyrDikjUulXL-YvRvKR59cO9oQQ8miSW6MA0fsDRA_BYgq1xaHNePn4BYllFT9HQVaA5-4bG-R9DT9AmHq7g3_IgPiwGYUUH3c_e0hj1gfVWALcFJA" loading="lazy" style="max-width:100%; height:auto; display:block; margin:20px 0;">
+
+<p>La estructura if evalúa una condición. Si esta es verdadera, ejecuta el bloque de código asociado. Si es falsa, el programa simplemente continúa sin ejecutar ese bloque. Es ideal para evaluar una única condición.</p>
+
+<p>Ejemplo de if simple en C:</p>
+
+<div class="codigo-recuadro">
+  <pre><code id="codigo2" class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int numero = 10;
+
+    if (numero &gt; 0) {
+        printf("El numero es positivo.");
+    }
+
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo2')">Copiar código</button>
+
+<p><strong>Condicionales Dobles (if-else)</strong></p>
+
+<img src= "https://repositorio.konradlorenz.edu.co/micrositios/001-986/img0.png" loading="lazy" style="max-width:100%; height:auto; display:block; margin:20px 0;">
+
+<p>La estructura if-else permite definir dos caminos de ejecución: uno si la condición es verdadera y otro si es falsa. Esto facilita tomar decisiones cuando se tienen dos posibles resultados.</p>
+
+<p>Ejemplo de if-else en C:</p>
+
+<div class="codigo-recuadro">
+  <pre><code id="codigo3" class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int numero = -5;
+
+    if (numero &gt;= 0) {
+        printf("El numero es positivo o cero.");
+    } else {
+        printf("El numero es negativo.");
+    }
+
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo3')">Copiar código</button>
+
+<p><strong>Condiciones Anidadas o Múltiples (if-else)</strong></p>
+
+
+<img src= "https://repositorio.konradlorenz.edu.co/micrositios/001-986/img0.1.png" loading="lazy" style="max-width:100%; height:auto; display:block; margin:20px 0;">
+
+
+<p>Cuando se necesitan evaluar varias condiciones sobre una misma variable o expresión, una serie de if-else anidados permite estructurar el código de forma que solo se ejecute el bloque de código correspondiente a la primera condición verdadera. Esto es útil cuando no se quiere o no se puede usar switch-case.</p>
+
+<p>Ejemplo de condiciones anidadas en C:</p>
+
+<div class="codigo-recuadro">
+  <pre><code id="codigo4" class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int opcion = 2;
+
+    if (opcion == 1) {
+        printf("Opcion 1 seleccionada.");
+    } else if (opcion == 2) {
+        printf("Opcion 2 seleccionada.");
+    } else if (opcion == 3) {
+        printf("Opcion 3 seleccionada.");
+    } else {
+        printf("Opcion no valida.");
+    }
+
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo4')">Copiar código</button>
+
+
+                        `;
+                        break;
+                    case 'estructurasR':
+                        content.innerHTML = `
+                            <h1>Estructuras Repetitivas</h1>
+                            <p><strong>Estructuras Repetitivas en C</strong></p>
+<p>Las <strong>estructuras repetitivas</strong> en C permiten ejecutar un bloque de código varias veces hasta que se cumpla una condición. En C, las principales estructuras de bucles son <code>for</code>, <code>while</code> y <code>do-while</code>. Cada uno tiene aplicaciones específicas que ayudan al programador a elegir la opción más adecuada para cada caso.</p>
+
+<h3>Ciclo <code>for</code></h3>
+<p>El ciclo <code>for</code> es adecuado cuando se conoce de antemano el número de veces que se desea que el código se repita. La estructura del ciclo <code>for</code> incluye tres elementos: una inicialización, una condición y un incremento o decremento, que se ejecutan en secuencia en cada iteración.</p>
+
+<p><strong>Sintaxis del ciclo <code>for</code> en C:</strong></p>
+<div class="codigo-recuadro">
+  <pre><code>
+for (inicialización; condición; incremento/decremento) {
+    // Código a ejecutar
+}
+</code></pre>
+</div>
+
+<p><strong>Ejemplo práctico: Sumar los primeros 10 números naturales</strong></p>
+<div class="codigo-recuadro" id="codigo1">
+  <pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int suma = 0;
+
+    for (int i = 1; i <= 10; i++) {
+        suma += i;  // Suma el valor actual de i a suma
+    }
+
+    printf("La suma de los primeros 10 numeros naturales es: %d", suma);
+
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo1')">Copiar código</button>
+
+<p><strong>Explicación:</strong><br>
+El ciclo comienza con <code>i = 1</code> y se repite hasta que <code>i</code> sea mayor que 10. En cada iteración, el valor de <code>i</code> se agrega a la variable <code>suma</code>. Al final del ciclo, <code>suma</code> contiene el total de los primeros 10 números.</p>
+
+<p><strong>Ejercicio adicional:</strong><br>
+Escribe un programa que utilice un ciclo <code>for</code> para imprimir la tabla de multiplicar de un número dado.</p>
+
+<div class="codigo-recuadro" id="codigo2">
+<pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int num;
+    printf("Introduce un número para ver su tabla de multiplicar: ");
+    scanf("%d", &num);
+
+    for (int i = 1; i <= 10; i++) {
+        printf("%d x %d = %d", num, i, num * i);
+    }
+
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo2')">Copiar código</button>
+
+<h3>Ciclo <code>while</code></h3>
+<p>El ciclo <code>while</code> se utiliza cuando no se conoce de antemano el número de iteraciones, y el ciclo se ejecuta siempre que una condición sea verdadera. Si la condición es falsa desde el inicio, el bloque de código no se ejecuta.</p>
+
+<p><strong>Sintaxis del ciclo <code>while</code> en C:</strong></p>
+<div class="codigo-recuadro">
+  <pre><code>
+while (condición) {
+    // Código a ejecutar
+}
+</code></pre>
+</div>
+
+<p><strong>Ejemplo práctico: Contar hasta que el usuario ingrese un número mayor que 100</strong></p>
+<div class="codigo-recuadro" id="codigo3">
+  <pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int numero;
+
+    printf("Introduce un número mayor que 100 para detener el ciclo:");
+    
+    scanf("%d", &numero);
+    while (numero <= 100) {
+        printf("El número %d es menor o igual a 100, intenta de nuevo:", numero);
+        scanf("%d", &numero);  // Pide otro número
+    }
+
+    printf("¡Número mayor a 100! Ciclo terminado.");
+
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo3')">Copiar código</button>
+
+<p><strong>Explicación:</strong><br>
+Este ciclo <code>while</code> solicita un número repetidamente hasta que el usuario introduzca un número mayor que 100. El ciclo se detiene cuando la condición <code>numero &lt;= 100</code> es falsa.</p>
+
+<p><strong>Ejercicio adicional:</strong><br>
+Escribe un programa que utilice un ciclo <code>while</code> para contar cuántas veces se debe dividir un número entero positivo por 2 hasta que el resultado sea menor que 1.</p>
+
+<div class="codigo-recuadro" id="codigo4">
+<pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int numero, contador = 0;
+    printf("Introduce un número entero positivo: ");
+    scanf("%d", &numero);
+
+    while (numero >= 1) {
+        numero /= 2;
+        contador++;
+    }
+
+    printf("El número se puede dividir %d veces por 2 antes de ser menor que 1.", contador);
+
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo4')">Copiar código</button>
+
+<h3>Ciclo <code>do-while</code></h3>
+<p>El ciclo <code>do-while</code> es similar al <code>while</code>, pero garantiza que el bloque de código se ejecute al menos una vez, ya que la condición se evalúa al final de la iteración. Esto es útil en situaciones donde se requiere una ejecución inicial antes de evaluar la condición.</p>
+
+<p><strong>Sintaxis del ciclo <code>do-while</code> en C:</strong></p>
+<div class="codigo-recuadro" 
+  <pre><code>
+do {
+    // Código a ejecutar
+} while (condición);
+</code></pre>
+</div>
+
+<p><strong>Ejemplo práctico: Calcular la suma de números ingresados hasta que el usuario ingrese 0</strong></p>
+
+<div class="codigo-recuadro" id="codigo5">
+  <pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int numero, suma = 0;
+
+    do {
+        printf("Introduce un numero (0 para terminar): ");
+        scanf("%d", &numero);
+        suma += numero;  // Agrega el número a la suma
+    } while (numero != 0);
+
+    printf("La suma total es: %d", suma);
+
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo5')">Copiar código</button>
+
+<p><strong>Explicación:</strong><br>
+En este ejemplo, el programa solicita un número y lo suma al total. Si el usuario introduce <code>0</code>, el ciclo se termina. El ciclo <code>do-while</code> garantiza que el código dentro del <code>do</code> se ejecute al menos una vez.</p>
+
+<p><strong>Ejercicio adicional:</strong><br> Escribe un programa que use un ciclo <code>do-while</code> para pedir al usuario números hasta que ingrese un número negativo, y luego muestre el total de números ingresados.</p>
+
+<div class="codigo-recuadro" id="codigo6">
+<pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int numero, contador = 0;
+
+    do {
+        printf("Introduce un numero (negativo para terminar): ");
+        scanf("%d", &numero);
+
+        if (numero >= 0) {
+            contador++;
+        }
+    } while (numero >= 0);
+
+    printf("Ingresaste un total de %d numeros.", contador);
+
+    return 0;
+}
+</code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo6')">Copiar código</button>
+
+`;
+                        break;
+                    case 'arreglos':
+                        content.innerHTML = `
+                            <h1>Arreglos</h1>
+                            <p>Los arreglos en C son una estructura de datos fundamental que permite almacenar una colección de elementos del mismo tipo en posiciones de memoria contiguas. Esta característica hace que los arreglos sean extremadamente útiles para manejar grandes volúmenes de datos de forma eficiente. A continuación, se profundiza en las definiciones, usos, tipos y ejemplos de arreglos en C.</p>
+
+<h1>Arreglos en C</h1>
+
+<p>Los arreglos en C son una estructura de datos fundamental que permite almacenar una colección de elementos del mismo tipo en posiciones de memoria contiguas. Esta característica hace que los arreglos sean extremadamente útiles para manejar grandes volúmenes de datos de forma eficiente. A continuación, se profundiza en las definiciones, usos, tipos y ejemplos de arreglos en C.</p>
+
+<div class="video-container">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Dm0L9Hmv0ho?start=14&si=w67E6Jfz8fk_qYc0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="margin:20px 0;"></iframe>
+</div>
+
+<h2>Definición y Usos de los Arreglos</h2>
+<p>Un arreglo es un conjunto de elementos del mismo tipo, como <code>int</code>, <code>float</code> o <code>char</code>, organizados en una secuencia continua en memoria. La declaración de un arreglo incluye el tipo de los elementos, el nombre del arreglo y su tamaño (la cantidad de elementos). Por ejemplo, <code>int numeros[5];</code> declara un arreglo de 5 enteros.</p>
+<p>Los arreglos son útiles para almacenar listas de elementos como calificaciones, números o nombres, y para realizar operaciones repetitivas de forma eficiente, como sumar o promediar varios números. Además, se utilizan ampliamente en el procesamiento de matrices y en gráficos, donde los datos se organizan en estructuras bidimensionales.</p>
+
+<h2>Tipos de Arreglos</h2>
+<p>Existen varios tipos de arreglos en C, pero los más comunes son los unidimensionales y bidimensionales.</p>
+
+<h3>Arreglos Unidimensionales</h3>
+<p>Un arreglo unidimensional es esencialmente una lista lineal de elementos del mismo tipo. El acceso a los elementos de un arreglo unidimensional se realiza mediante un índice que comienza desde 0. Estos arreglos son útiles en operaciones sencillas como almacenar números o cadenas de caracteres.</p>
+
+<div class="codigo-recuadro" id="codigo1">
+  <pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int numeros[5];  // Declaramos un arreglo de 5 enteros
+    int suma = 0;
+    float promedio;
+
+    // Pedimos al usuario que ingrese 5 números
+    printf("Ingresa 5 números:");
+    for (int i = 0; i < 5; i++) {
+        printf("Número %d: ", i + 1);
+        scanf("%d", &numeros[i]);
+    }
+
+    // Calculamos la suma de los números
+    for (int i = 0; i < 5; i++) {
+        suma += numeros[i];
+    }
+
+    // Calculamos el promedio
+    promedio = suma / 5.0;
+
+    // Mostramos los resultados
+    printf("La suma de los números es: %d", suma);
+    printf("El promedio de los números es: %.2f", promedio);
+
+    return 0;
+}
+  </code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo1')">Copiar Código</button>
+
+<h3>Arreglos Bidimensionales</h3>
+<p>Un arreglo bidimensional, o matriz, es una colección de datos organizados en filas y columnas, lo que permite manejar datos de manera más compleja. Este tipo de arreglo es crucial en campos como las matemáticas, el procesamiento de imágenes y las simulaciones científicas. Los arreglos bidimensionales son especialmente útiles para representar tablas o matrices matemáticas.</p>
+
+<div class="codigo-recuadro" id="codigo2">
+  <pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int matrizA[2][2] = {{1, 2}, {3, 4}};
+    int matrizB[2][2] = {{5, 6}, {7, 8}};
+    int resultado[2][2];
+
+    // Multiplicación de matrices
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            resultado[i][j] = 0;  // Inicializamos el elemento en cero
+            for (int k = 0; k < 2; k++) {
+                resultado[i][j] += matrizA[i][k] * matrizB[k][j];
+            }
+        }
+    }
+
+    // Mostramos el resultado
+    printf("El resultado de la multiplicación es:");
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            printf("%d ", resultado[i][j]);
+        }
+        printf(" ");
+    }
+
+    return 0;
+}
+  </code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo2')">Copiar Código</button>
+
+<h2>Operaciones Comunes con Arreglos</h2>
+<ul>
+    <li><strong>Asignación de valores:</strong> Los valores pueden asignarse directamente al declarar el arreglo o más tarde, usando índices específicos.</li>
+    <li><strong>Acceso a elementos:</strong> Para acceder a un elemento específico de un arreglo, se utiliza su índice.</li>
+    <li><strong>Recorrer el arreglo:</strong> Es común utilizar bucles <code>for</code> o <code>while</code> para iterar sobre los elementos de un arreglo.</li>
+    <li><strong>Suma de elementos:</strong> Se puede crear un ciclo para sumar todos los elementos de un arreglo unidimensional.</li>
+    <li><strong>Transposición de matrices:</strong> En arreglos bidimensionales, la transposición implica intercambiar filas y columnas, un concepto útil en álgebra lineal y procesamiento de imágenes.</li>
+</ul>
+
+<h2>Arreglos Tridimensionales</h2>
+<p>En C, existen los arreglos tridimensionales, que son una extensión de los arreglos bidimensionales. Un arreglo tridimensional se puede visualizar como una matriz con filas, columnas y una tercera dimensión, que podría considerarse como "profundidad". Son útiles en gráficos 3D, simulaciones y procesamiento de imágenes.</p>
+
+<h3>Declaración de un Arreglo Tridimensional</h3>
+<p>La sintaxis básica para declarar un arreglo tridimensional es:</p>
+<pre><code>
+tipo_de_dato nombre_del_arreglo[dim1][dim2][dim3];
+</code></pre>
+<p>Donde:</p>
+<ul>
+    <li><strong>tipo_de_dato:</strong> El tipo de dato de los elementos (por ejemplo, <code>int</code>, <code>float</code>, <code>char</code>).</li>
+    <li><strong>dim1, dim2, dim3:</strong> Las dimensiones del arreglo, que representan el número de elementos en cada dirección (filas, columnas y la tercera dimensión o profundidad).</li>
+</ul>
+
+<h3>Ejemplo de un Arreglo Tridimensional</h3>
+<p>A continuación se muestra cómo declarar e interactuar con un arreglo tridimensional:</p>
+
+<div class="codigo-recuadro" id="codigo3">
+  <pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    // Declaramos un arreglo tridimensional de 2x3x4 (2 capas, 3 filas, 4 columnas)
+    int arr[2][3][4] = {
+        {
+            {1, 2, 3, 4},
+            {5, 6, 7, 8},
+            {9, 10, 11, 12}
+        },
+        {
+            {13, 14, 15, 16},
+            {17, 18, 19, 20},
+            {21, 22, 23, 24}
+        }
+    };
+
+    // Acceso y visualización de los elementos del arreglo
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 4; k++) {
+                printf("arr[%d][%d][%d] = %d", i, j, k, arr[i][j][k]);
+            }
+        }
+    }
+
+    return 0;
+}
+  </code></pre>
+</div>
+<button class="copiar-btn" onclick="copiarCodigo('codigo3')">Copiar Código</button>
+
+<h3>Aplicaciones de los Arreglos Tridimensionales</h3>
+<p>Los arreglos tridimensionales son útiles en diversas áreas, tales como:</p>
+<ul>
+    <li>Gráficos 3D: Para almacenar coordenadas de puntos en el espacio tridimensional.</li>
+    <li>Simulaciones físicas: Para representar datos como temperatura, presión o velocidad en una matriz 3D.</li>
+    <li>Procesamiento de imágenes y video: Para almacenar cada capa de color en una imagen en 3D.</li>
+</ul>
+
+`;
+                        break;
+                    case 'metodos':
+                        content.innerHTML = `
+                            <h1>Métodos de Ordenamiento</h1>
+                            <p>Métodos de Ordenamiento</p>
+<p> Los métodos de ordenamiento son algoritmos utilizados para organizar elementos de una lista o arreglo en un orden específico, como ascendente o descendente, mejorando la eficiencia de la búsqueda y manipulación de datos. </p>
+<!-- Ordenamiento Burbuja -->
+<div class="metodo">
+  <h3>Ordenamiento Burbuja (Bubble Sort)</h3>
+  <p>
+    El ordenamiento burbuja es un algoritmo sencillo que compara elementos adyacentes de la lista y los intercambia si están en el orden incorrecto. Este proceso se repite hasta que toda la lista esté ordenada. Aunque es fácil de entender, su eficiencia es baja para listas grandes.
+  </p>
+  <h4>Código en C:</h4>
+  <div class="codigo-recuadro" id="codigo1">
+    <pre><code>
+#include &lt;stdio.h&gt;
+
+void burbuja(int arr[], int n) {
+    for (int i = 0; i < n-1; i++) {
+        for (int j = 0; j < n-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int arr[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    printf("Array original: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf(" ");
+
+    burbuja(arr, n);
+    
+    printf("Array ordenado: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf(" ");
+
+    return 0;
+}
+    </code></pre>
+  </div>
+  <button class="copiar-btn" onclick="copyToClipboard('#codigo1')">Copiar código</button>
+</div>
+
+<!-- Ordenamiento por Inserción -->
+<div class="metodo">
+  <h3>Ordenamiento por Inserción (Insertion Sort)</h3>
+  <p>
+    El ordenamiento por inserción toma un elemento a la vez y lo inserta en su posición correcta dentro de la porción ordenada de la lista. Es especialmente eficiente en listas pequeñas o casi ordenadas.
+  </p>
+  <h4>Código en C:</h4>
+  <div class="codigo-recuadro" id="codigo2">
+    <pre><code>
+#include &lt;stdio.h&gt;
+
+void insercion(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+int main() {
+    int arr[] = {12, 11, 13, 5, 6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    printf("Array original: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    insercion(arr, n);
+    
+    printf("Array ordenado: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf(" ");
+
+    return 0;
+}
+    </code></pre>
+  </div>
+  <button class="copiar-btn" onclick="copyToClipboard('#codigo2')">Copiar código</button>
+</div>
+
+<!-- Ordenamiento por Selección -->
+<div class="metodo">
+  <h3>Ordenamiento por Selección (Selection Sort)</h3>
+  <p>
+    Este método encuentra el elemento más pequeño en la lista y lo intercambia con el primer elemento no ordenado. Luego, repite el proceso para el resto de la lista. Aunque fácil de implementar, no es el más eficiente para listas grandes.
+  </p>
+  <h4>Código en C:</h4>
+  <div class="codigo-recuadro" id="codigo3">
+    <pre><code>
+#include &lt;stdio.h&gt;
+
+void seleccion(int arr[], int n) {
+    for (int i = 0; i < n-1; i++) {
+        int min_idx = i;
+        for (int j = i+1; j < n; j++) {
+            if (arr[j] < arr[min_idx]) {
+                min_idx = j;
+            }
+        }
+        int temp = arr[i];
+        arr[i] = arr[min_idx];
+        arr[min_idx] = temp;
+    }
+}
+
+int main() {
+    int arr[] = {64, 25, 12, 22, 11};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    printf("Array original: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf(" ");
+
+    seleccion(arr, n);
+    
+    printf("Array ordenado: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf(" ");
+
+    return 0;
+}
+    </code></pre>
+  </div>
+</div>
+<button class="copiar-btn" onclick="copyToClipboard('#codigo3')">Copiar código</button>
+
+<!-- Ordenamiento Shell -->
+<div class="metodo">
+  <h3>Ordenamiento Shell (Shell Sort)</h3>
+  <p>
+    El ordenamiento Shell es una mejora del ordenamiento por inserción, que utiliza un "intervalo" para comparar y mover elementos que están separados, reduciendo este intervalo a 1 al final del proceso. Esto mejora la eficiencia en listas grandes.
+  </p>
+  <h4>Código en C:</h4>
+  <div class="codigo-recuadro" id="codigo4">
+    <pre><code>
+#include  &lt;stdio.h&gt;
+
+void shellSort(int arr[], int n) {
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i++) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
+int main() {
+    int arr[] = {5, 2, 9, 1, 5, 6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    printf("Array original: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf(" ");
+
+    shellSort(arr, n);
+    
+    printf("Array ordenado: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf(" ");
+
+    return 0;
+}
+    </code></pre>
+  </div>
+</div>
+<button class="copiar-btn" onclick="copyToClipboard('#codigo4')">Copiar código</button>
+
+                        `;
+                        break;
+                    default:
+                        content.innerHTML = `<p>Sección no encontrada</p>`;
+                }
+                content.style.opacity = 1;
+            }, 500);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
+            } else {
+                sidebar.style.left = '0px';
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.left = '-250px';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+  var lazyVideos = document.querySelectorAll(".lazy-video");
+
+  function loadVideo() {
+    lazyVideos.forEach(function(video) {
+      if (video.getBoundingClientRect().top < window.innerHeight && !video.src) {
+        video.src = video.getAttribute('data-src'); // Carga el vídeo
+        video.classList.remove('lazy-video'); // Elimina la clase para evitar cargarlo de nuevo
+      }
+    });
+  }
+
+  loadVideo(); // Verifica si el vídeo está en la vista al cargar la página.
+  window.addEventListener("scroll", loadVideo); // Carga el vídeo cuando el usuario hace scroll.
+});
+
+function copiarCodigo(id) {
+    var codigo = document.getElementById(id);
+    var rango = document.createRange();
+    rango.selectNode(codigo);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(rango);
+    document.execCommand('copy');
+    alert("Código copiado al portapapeles");
+}
+
+    </script>
+</body>
+</html>
